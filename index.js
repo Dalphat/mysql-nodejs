@@ -4,13 +4,11 @@ const mysql = require('mysql');
 
 const app = express();
 
-const query = 'SELECT * FROM client';
-
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'temp',
-    database: 'user1'
+    database: 'user'
 });
 
 connection.connect(err => {
@@ -25,10 +23,11 @@ connection.connect(err => {
 app.use(cors());
 
 app.get('/',(req,res) => {
-    res.send("Go to /user to see users.");
+    res.send('Go to /user to see users.');
 });
 
 app.get('/user',(req,res) => {
+    const query = 'SELECT * FROM client';
     connection.query(query,(err,results)=>{
         if (err)
             return res.send(err);
@@ -38,6 +37,16 @@ app.get('/user',(req,res) => {
     });
 });
 
+app.get('/user/add',(req,res) => {
+    const {id,name} = req.query;
+    const insert = `INSERT into client (name) VALUES('${name}')`;
+    connection.query(insert,(err,results)=>{
+        if(err)
+            return res.send(err);
+        return res.send('Sucessfully added user: ' + name);
+    });
+});
+
 app.listen(4000,()=>{
-    console.log("Listening to port 4000");
+    console.log('Listening to port 4000');
 });
