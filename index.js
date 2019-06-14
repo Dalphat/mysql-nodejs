@@ -38,7 +38,7 @@ app.get('/user',(req,res) => {
 });
 
 app.get('/user/add',(req,res) => {
-    const {id,name} = req.query;
+    const {name} = req.query;
     const insert = `INSERT into client (name) VALUES('${name}')`;
     connection.query(insert,(err,results)=>{
         if(err)
